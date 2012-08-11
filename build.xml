@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="liquibase">
+
+    <!-- documentation is available at http://www.liquibase.org/manual/ant -->
+
+    <target name="prepare">
+        <path id="classpath">
+            <fileset dir="bin">
+                <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </path>
+
+        <property name="liquibase.changelog.file" value="open-schema.liquibase.xml"/>
+        <property name="liquibase.generate.SQL.file" value="open-schema.sql"/>
+        <property name="liquibase.databaseChangeLogTableName" value="DB_CHANGE_LOG"/>
+        <property name="liquibase.databaseChangeLogLockTableName" value="DB_CHANGE_LOG_SEMAPHORE"/>
+
+        <property name="database.host" value="box666.bluehost.com"/>
+        <property name="database.name" value="blueserf_devl_bfelob_oge_admin"/>
+        <property name="database.url" value="jdbc:mysql://${database.host}/${database.name}"/>
+        <property name="database.driver" value="com.mysql.jdbc.Driver"/>
+
+        <property name="generated.documentation.path" value="docs/generated"/>
+
+        <taskdef resource="liquibasetasks.properties">
+            <classpath refid="classpath"/>
+        </taskdef>
+
+        <fail unless="database.url">database.url not set</fail>     
+        <fail unless="database.username">database.username not set</fail>
+        <fail unless="database.password">database.password not set</fail>
+    </target>
+
+    <target name="clean" depends="prepare">
+        <delete dir="${generated.documentation.path}"/>
+        <delete file="${liquibase.generate.SQL.file}"/>
+    </target>
+
+    <target name="dropAll" depends="prepare">
+        <dropAllDatabaseObjects 
+                driver="${database.driver}"
+                url="${database.url}"
+                username="${database.username}"
+                password="${database.password}"
+                promptOnNonLocalDatabase="yes"
+                classpathref="classpath"
+                />
+    </target>
+
+    <target name="update" depends="prepare">
+        <updateDatabase
+                changeLogFile="${liquibase.changelog.file}"
+                driver="${database.driver}"
+                url="${database.url}"
+                username="${database.username}"
+                password="${database.password}"
+                databaseChangeLogTableName="${liquibase.databaseChangeLogTableName}"
+                databaseChangeLogLockTableName="${liquibase.databaseChangeLogLockTableName}"
+                classpathref="classpath"
+                />
+    </target>
+
+    <target name="updateSQL" depends="prepare">
+        <echo message="Generating SQL for updates, not actually running SQL"/>
+        <updateDatabase
+                changeLogFile="${liquibase.changelog.file}"
+                driver="${database.driver}"
+                url="${database.url}"
+                username="${database.username}"
+                password="${database.password}"
+                databaseChangeLogTableName="${liquibase.databaseChangeLogTableName}"
+                databaseChangeLogLockTableName="${liquibase.databaseChangeLogLockTableName}"
+                classpathref="classpath"
+                outputFile="${liquibase.generate.SQL.file}"
+                />
+    </target>
+
+    <target name="drop-and-update" depends="prepare">
+        <updateDatabase
+                dropFirst="yes"
+                promptOnNonLocalDatabase="yes"
+                changeLogFile="${liquibase.changelog.file}"
+                driver="${database.driver}"
+                url="${database.url}"
+                username="${database.username}"
+                password="${database.password}"
+                databaseChangeLogTableName="${liquibase.databaseChangeLogTableName}"
+                databaseChangeLogLockTableName="${liquibase.databaseChangeLogLockTableName}"
+                classpathref="classpath"
+                />
+    </target>
+
+    <target name="document" depends="prepare">
+        <delete dir="${generated.documentation.path}"/>
+        <dbDoc  changeLogFile="${liquibase.changelog.file}"
+                driver="${database.driver}"
+                url="${database.url}"
+                username="${database.username}"
+                password="${database.password}"
+                outputDirectory="${generated.documentation.path}/change-log"
+                databaseChangeLogTableName="${liquibase.databaseChangeLogTableName}"
+                databaseChangeLogLockTableName="${liquibase.databaseChangeLogLockTableName}"
+                classpathref="classpath"
+                />
+        <java classname="net.sourceforge.schemaspy.Main" classpathref="classpath" fork="true" failonerror="false">
+            <arg line="-t mysql"/>
+            <arg line="-host ${database.host}"/>
+            <arg line="-db ${database.name}"/>
+            <arg line="-u ${database.username}"/>
+            <arg line="-p ${database.password}"/>
+            <!-- <arg line="-norows"/> -->
+            <!-- <arg line="-noimplied"/> -->
+            <!-- <arg line="-i (ELEMENT_CATALOG)|(ELEMENT_TYPE)|(MODULE_CATALOG)|(FORM_CATALOG)|(FORM_ELEMENT)|(GROUP_FORM_ELEMENT)|(OBJECT_CATALOG)|(OBJECT_TYPE)|(MESSAGE_CATALOG)|(MESSAGE_CONTENT)"/> -->
+            <arg line="-hq"/>
+            <arg line="-o ${generated.documentation.path}/schemaSpy"/>
+        </java>
+    </target>
+
+</project>

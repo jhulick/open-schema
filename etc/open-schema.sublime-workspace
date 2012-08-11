@@ -1,0 +1,496 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"classp",
+				"classpathref"
+			],
+			[
+				"c",
+				"column"
+			],
+			[
+				"file",
+				"files"
+			],
+			[
+				"age",
+				"agencyCode"
+			],
+			[
+				"ag",
+				"agencyCode"
+			],
+			[
+				"select",
+				"selectAgency"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"caption",
+				"captionKey"
+			],
+			[
+				"option",
+				"optionsValues"
+			],
+			[
+				"files",
+				"filesize"
+			],
+			[
+				"midd",
+				"middleName"
+			],
+			[
+				"dir",
+				"directory"
+			],
+			[
+				"gener",
+				"generateFileName"
+			],
+			[
+				"data",
+				"data"
+			],
+			[
+				"dataSou",
+				"dataSourceName"
+			],
+			[
+				"ran",
+				"randomizableDataSources"
+			],
+			[
+				"use",
+				"usage"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "{\n    \"cmd\": [\"java\", \"-jar\", \"C:\\\\Tools\\\\liquibase-2.0.5\\\\liquibase.jar\", \n    			\"--changeLogFile=$file\", \n    			\"--driver=com.mysql.jdbc.Driver\", \n                \"--classpath=C:\\\\Tools\\\\liquibase-2.0.5\\\\mysql-connector-java-5.1.21-bin.jar\", \n                \"--username=blueserf_snshah\", \n                \"--password=Ftv332ezff7\",\n                \"--url=jdbc:mysql://box666.bluehost.com/blueserf_devl_bfelob_oge_admin\",\n    			\"update\"]\n}\n\n/*\nserver: box666.bluehost.com\ndatabase name: blueserf_devl_bfelob_oge_admin\nuser: blueserf_snshah\npass: Ftv332ezff7\n\nSetup Remote Mysql Database Access on BlueHost, added 173.66.0.134 as valid host\nThis may break if IP address changes\n*/\n\n/*\nInstructions: http://www.liquibase.org/manual/command_line\n\nDon't execute changesets, save SQL to /tmp/script.sql\n\njava -jar C:\\Tools\\liquibase-2.0.5\\liquibase.jar --driver=com.mysql.jdbc.Driver --classpath=C:\\Tools\\liquibase-2.0.5\\mysql-connector-java-5.1.21-bin.jar --username=blueserf_snshah --password=Ftv332ezff7 --url=jdbc:mysql://box666.bluehost.com/blueserf_devl_bfelob_oge_admin dbDoc\njava -jar C:\\Tools\\liquibase-2.0.5\\schemaSpy_5.0.0.jar -t mysql -dp C:\\Tools\\liquibase-2.0.5\\mysql-connector-java-5.1.21-bin.jar -host box666.bluehost.com -db blueserf_devl_bfelob_oge_admin -u blueserf_snshah -p Ftv332ezff7 -o schema\njava -jar C:\\Tools\\liquibase-2.0.5\\schemaSpy_5.0.0.jar -dbhelp\n*/",
+			"file": "/C/Users/Shahid N. Shah/AppData/Roaming/Sublime Text 2/Packages/User/Liquibase.sublime-build",
+			"file_size": 1412,
+			"file_write_time": 129891869137071180,
+			"settings":
+			{
+				"buffer_size": 1381,
+				"line_ending": "Windows",
+				"name": "untitled.sublime-build"
+			}
+		},
+		{
+			"contents": "The following is the Data Model Design:\nTable: Document_Type\nDoc_Type_id   (PK)\nDoc_Type_name\nTable: Document\nDoc_id (PK)\nDoc_Type_id (FK – Document_Type Table)\nDoc_File_Name\nTable: User_group\nUser_group_id (PK)\nUser_group_name\nTable: User\nUser_id (PK)\nUser_MAXid\nUser_email\nUser_First\nUser_Last\nUser_group_id (FK – User_group)\nTable: Agency_Department\nAgency_Department_id (PK)\nAgency_Department_Name\nTable: Component\nComponent_id (PK)\nComponent_name\nAgency_Department_id ( FK – Agency_Department)\nTable: Year\nYear_id (PK)\nYear_number\n\n\ncreate_table \"activity_type\", :force => true do |t|\n    t.integer  \"parent_id\"\n    t.string   \"name\",                                      :null => false\n    t.string   \"seed_name\"\n    t.string   \"description\"\n    t.string   \"hierarchy_path\",                            :null => false\n    t.string   \"app_constant\",                              :null => false\n    t.boolean  \"url_is_reusable\",        :default => false, :null => false\n    t.integer  \"refers_to_records\",      :default => 0,     :null => false\n    t.string   \"references_description\"\n    t.datetime \"created_at\",                                :null => false\n    t.datetime \"updated_at\",                                :null => false\n    t.integer  \"lock_version\",           :default => 0,     :null => false\n    t.integer  \"lft\"\n    t.integer  \"rgt\"\nend\n \ncreate_table \"activity_log\", :force => true do |t|\n    t.integer  \"user_session_id\"\n    t.integer  \"activity_type_id\",                :null => false\n    t.string   \"activity\"\n    t.string   \"request_url\"\n    t.string   \"referer_url\"\n    t.integer  \"reference_1\"\n    t.integer  \"reference_2\"\n    t.integer  \"reference_3\"\n    t.datetime \"start_time\"\n    t.datetime \"end_time\"\n    t.datetime \"created_at\",                      :null => false\n    t.datetime \"updated_at\",                      :null => false\n    t.integer  \"lock_version\",     :default => 0, :null => false\nend\n\n",
+			"settings":
+			{
+				"buffer_size": 1935,
+				"line_ending": "Windows",
+				"name": "The following is the Data Model Design:"
+			}
+		},
+		{
+			"file": "/C/Projects/open-schema/open-schema.liquibase.xml",
+			"settings":
+			{
+				"buffer_size": 562,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Projects/open-schema/build.xml",
+			"settings":
+			{
+				"buffer_size": 5552,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/User/Liquibase.sublime-build",
+	"command_palette":
+	{
+		"height": 81.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"install pa",
+				"Package Control: Install Package"
+			],
+			[
+				"install p",
+				"Package Control: Install Package"
+			],
+			[
+				"package con",
+				"Package Control: Install Package"
+			],
+			[
+				"Package",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Projects/open-schema/build.xml",
+		"/C/Projects/open-schema/open-schema.sql",
+		"/C/Projects/open-schema/open-schema.liquibase.xml",
+		"/C/Projects/open-schema/change-sets/eav-structure/001-OGE-admin-utility.liquibase.xml",
+		"/C/Projects/open-schema/build.bat",
+		"/C/Projects/open-schema/README.md",
+		"/C/Projects/open-schema/docs/generated/schemaSpy-error.log",
+		"/C/Projects/open-schema/docs/generated/schemaSpy-output.log",
+		"/C/Projects/open-schema/change-sets/schema/001-schema-master.liquibase.xml",
+		"/C/Tools/apache-ant-1.8.4/bin/ant",
+		"/C/Projects/open-schema/change-sets/structural/001-master.liquibase.xml",
+		"/C/Projects/open-schema/change-sets/README.md",
+		"/C/Projects/open-schema/change-sets/README.txt",
+		"/C/Projects/open-schema/change-sets/001 Initial implementation.liquibase.xml",
+		"/C/Users/Shahid N. Shah/Dropbox/Projects/test.liquibase.xml",
+		"/C/Projects/MAX-OGE/docs-admin/docs-admin.go",
+		"/C/Projects/test.liquibase.xml",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp45956/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/casauth.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp36889/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/casauth-devl.php",
+		"/C/Users/Shahid N. Shah/AppData/Roaming/Sublime Text 2/Packages/User/Perl.sublime-build",
+		"/C/Projects/MAX-OGE/odata-notes.txt",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp43042/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/index.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp31405/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/user-specific-data.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp32321/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/assets/native/scripts/data.js",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp38985/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/assets/native/scripts/docs-admin.js",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp39713/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/server-time.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp39537/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/upload.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp42538/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/csv2json.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp06993/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/user-groups-to-roles-map.csv",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp48794/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/super-user-groups.csv",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp01783/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/index.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp58921/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/csv2json.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp01077/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/casauth.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp26458/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/assets/native/scripts/docs-admin.js",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp51076/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/assets/native/stylesheets/app.css",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp05615/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data/super-user-groups.csv",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp10593/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/upload.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp35854/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data/components.csv",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp41185/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/assets/native/scripts/data.js",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp07242/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/super-user-groups.csv",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp07357/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/components.csv",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp06170/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data-svc/agencies.csv",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp32382/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/error_log",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp32194/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp22418/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/feed.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp36396/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/data/agencies.csv",
+		"/C/Users/Shahid N. Shah/Dropbox/Ryohee Engineering/Documents/macro-process.uml",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp34505/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/server-time.php",
+		"/C/Temp/Scratchpad/agencies-08-07-2012.csv",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp24013/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/u2.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp07121/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/cas/CAS.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp26155/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/uploaded-files/Ambrose_Mark_CIO_NYRO_2012_278NEW_SEC.gov.pdf",
+		"/C/Tools/JaySvcUtil/AgencyBureauMap.js",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp12726/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/index.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp12206/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/assets/native/scripts/docs-admin.js",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp13354/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/assets/native/scripts/max-utils.js",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp30265/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/odata/PermittingEntities.php",
+		"/C/Users/Shahid N. Shah/AppData/Local/Temp/scp48006/home2/blueserf/public_html/devl.bfelob.netspective.com/oge/admin/odata/ab.php",
+		"/C/Tools/JaySvcUtil/ConfluenceGroupMap.js",
+		"/C/Users/Shahid N. Shah/Downloads/JayData-1.1.1.zip",
+		"/C/Users/Shahid N. Shah/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/C/Projects/MAX-OGE/docs-generator/README.md",
+		"/C/Projects/MAX-OGE/docs-generator/docs-generator.sublime-project",
+		"/C/Projects/MAX-OGE/docs-generator/generated-files/EOP/OMB/Finucan;Margaret;;SES Position 01;2011;278TR05;Margaret.Finucan@EOP.gov.pdf",
+		"/C/Projects/MAX-OGE/docs-generator/generated-files/HHS/HRSA/Hajdas;Saturnina;W;SES Position 01;2009;278TR09;;ut, imperdiet a, venenatis.pdf",
+		"/C/Projects/MAX-OGE/docs-generator/generated-files/EOP/USAID/Elledge;Cyndi;Moriah;SES Position 03;2011;278TR02;Cyndi.Elledge@EOP.gov.pdf",
+		"/C/Projects/MAX-OGE/docs-generator/generated-files/HHS/FDA/Cygrymus;Deneen;W;SES Position 05;2010;278TR06;.pdf",
+		"/C/Projects/MAX-OGE/docs-generator/generated-files/HHS/IHS/Kroening;Palmira;J;SES Position 05;2010;278TR08;Palmira.Kroening@HHS.gov;ligula eget .pdf",
+		"/C/Projects/MAX-OGE/docs-generator/generated-files/HHS/IHS/Noethiger;Kittie;;SES Position 00;2009;278TERM;Kittie.Noethiger@HHS.gov.pdf",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/agency-component.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/optional-field.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/test@file.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/file-template.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/pdf-template.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/document-type.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/position.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/year.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/last-name.txt",
+		"/C/Projects/MAX-OGE/docs-generator/randomizable-data/first-name.txt",
+		"/C/Users/Shahid N. Shah/AppData/Roaming/Sublime Text 2/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Projects/MAX-OGE/docs-generator/common-last-names.csv",
+		"/C/Users/Shahid N. Shah/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/Tools/Console2/console.xml"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"    <target name=\"update\" depends=\"prepare\">\n        <updateDatabase\n                changeLogFile=\"${liquibase.changelog.file}\"\n                driver=\"${database.driver}\"\n                url=\"${database.url}\"\n                username=\"${database.username}\"\n                password=\"${database.password}\"\n                classpathref=\"classpath\"\n                />\n    </target>\n\n",
+			"    <target name=\"update\" depends=\"prepare\">\n        <updateDatabase\n                changeLogFile=\"${liquibase.changelog.file}\"\n                driver=\"${database.driver}\"\n                url=\"${database.url}\"\n                username=\"${database.username}\"\n                password=\"${database.password}\"\n                classpathref=\"classpath\"\n                />\n    </target>\n",
+			"db.changelog.file",
+			"index",
+			"1100",
+			"party",
+			"entity_",
+			"party_",
+			"directory",
+			"party",
+			"      <createTable tableName=\"party_type\">\n          <column name=\"party_type_id\" type=\"${enum.primaryKey.type}\">\n              <constraints primaryKey=\"true\" nullable=\"false\"/>\n          </column>\n          <column name=\"caption\" type=\"${enum.caption.type}\"/>\n      </createTable>\n\n",
+			"CAS",
+			"data.php",
+			"heat",
+			"<img src=\"assets/native/images/remove-from-list.png\"/>",
+			"batch",
+			"clickheat",
+			" $",
+			"directory",
+			"positionTitle",
+			"\n		",
+			"numberOfFileToGenerate",
+			"'byName'",
+			"filetoco",
+			"\"2\""
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"liquibase.changelog.file",
+			"entity",
+			"activity_",
+			"entity_",
+			"relationship",
+			"content",
+			"",
+			"numberOfFilesToGenerate"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/C/Users/Shahid N. Shah/AppData/Roaming/Sublime Text 2/Packages/User/Liquibase.sublime-build",
+					"settings":
+					{
+						"buffer_size": 1381,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1081,
+								803
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"settings":
+					{
+						"buffer_size": 1935,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1935,
+								1935
+							]
+						],
+						"settings":
+						{
+							"auto_name": "The following is the Data Model Design:",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Projects/open-schema/open-schema.liquibase.xml",
+					"settings":
+					{
+						"buffer_size": 562,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								562,
+								562
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/Projects/open-schema/build.xml",
+					"settings":
+					{
+						"buffer_size": 5552,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1083,
+								1083
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 29.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 358.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/C/Projects/MAX-OGE/docs-manager/docs-manager.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 282.0,
+	"status_bar_visible": true
+}

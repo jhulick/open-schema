@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+ 
+    <property name="system.primaryKey.type" value="int"/>
+    
+    <property name="enum.primaryKey.type" value="int"/>
+    <property name="enum.caption.type" value="varchar(255)"/>
+
+    <changeSet id="001-schema-master" author="Shahid N. Shah">
+
+      <!-- Documentation for Liquibase: http://www.liquibase.org/manual/refactoring_commands -->
+      <!-- Documentation for EAV: 
+           * http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2110957/ 
+           * http://www.ibc7.org/article/journal_v.php?sid=264
+           Optimizing reads:
+           Create views to pivot EAV:
+           * in PHP / MySQL http://www.iwilldomybest.com/2008/08/php-mysql-tip-3/
+           * http://dba.stackexchange.com/questions/9466/most-performant-sql-query-needed
+           * http://stackoverflow.com/questions/8764290/what-is-best-performance-for-retrieving-mysql-eav-results-as-relational-table
+           * http://stackoverflow.com/questions/649802/how-to-pivot-a-mysql-entity-attribute-value-schema
+           -->
+
+      <createTable tableName="directory">
+          <column name="directory_id" type="${enum.primaryKey.type}">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="parent_id" type="${enum.primaryKey.type}">
+              <constraints references="directory.directory_id" foreignKeyName="FK_directory_directory_id"/>
+          </column>            
+          <column name="name" type="${enum.caption.type}">
+              <constraints nullable="false"/>
+          </column>
+          <column name="qualified_name" type="${enum.caption.type}">
+              <constraints unique="true" nullable="false"/>
+          </column>
+      </createTable>
+
+      <createTable tableName="relationship_type">
+          <column name="relationship_type_id" type="${enum.primaryKey.type}">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="parent_id" type="${enum.primaryKey.type}">
+              <constraints references="relationship.relationship_type_id" foreignKeyName="FK_relationship_relationship_type_id"/>
+          </column>            
+          <column name="direction" type="varchar(255)">
+              <constraints unique="true" nullable="false"/>
+          </column>
+      </createTable>
+
+      <createTable tableName="value_type">
+          <column name="value_type_id" type="${enum.primaryKey.type}">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="parent_id" type="${enum.primaryKey.type}">
+              <constraints references="value_type.value_type_id" foreignKeyName="FK_value_type_value_type_id"/>
+          </column>            
+          <column name="name" type="${enum.caption.type}">
+              <constraints nullable="false"/>
+          </column>
+          <column name="table_name" type="varchar(255)">
+              <constraints nullable="false"/>
+          </column>
+          <column name="qualified_name" type="${enum.caption.type}">
+              <constraints unique="true" nullable="false"/>
+          </column>
+          <column name="is_domain_constrained" type="boolean"/>
+      </createTable>
+
+      <createTable tableName="value_type_domain_item">
+          <column name="value_type_domain_item_id" type="${enum.primaryKey.type}">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="value_type_id" type="${enum.primaryKey.type}">
+              <constraints references="value_type.value_type_id" foreignKeyName="FK_value_type_domain_item_value_type_id"/>
+          </column>            
+          <column name="parent_id" type="${enum.primaryKey.type}">
+              <constraints references="value_type_domain_item.value_type_domain_item_id" foreignKeyName="FK_value_type_domain_item_id"/>
+          </column>            
+          <column name="position" type="int"/>
+          <column name="name" type="${enum.caption.type}">
+              <constraints nullable="false"/>
+          </column>
+          <column name="abbrev" type="varchar(255)"/>
+      </createTable>
+
+      <createTable tableName="entity_type">
+          <column name="entity_type_id" type="${enum.primaryKey.type}">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="directory_id" type="${enum.primaryKey.type}">
+              <constraints references="directory.directory_id" foreignKeyName="FK_entity_directory_id" nullable="false"/>
+          </column>
+          <column name="parent_id" type="${enum.primaryKey.type}">
+              <constraints references="entity_type.entity_type_id" foreignKeyName="FK_entity_type_entity_type_id"/>
+          </column>            
+          <column name="name" type="${enum.caption.type}">
+              <constraints nullable="false"/>
+          </column>
+          <column name="qualified_name" type="${enum.caption.type}">
+              <constraints unique="true" nullable="false"/>
+          </column>
+      </createTable>
+
+      <createTable tableName="attr_type">
+          <column name="attr_type_id" type="${enum.primaryKey.type}">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="entity_type_id" type="${enum.primaryKey.type}">
+              <constraints references="entity_type.entity_type_id" foreignKeyName="FK_entity_type_id" nullable="false"/>
+          </column>
+          <column name="value_type_id" type="${enum.primaryKey.type}">
+              <constraints references="value_type.value_type_id" foreignKeyName="FK_attr_type_value_type_id" nullable="false"/>
+          </column>
+          <column name="parent_id" type="${enum.primaryKey.type}">
+              <constraints references="attr_type.attr_type_id" foreignKeyName="FK_attr_type_attr_type_id"/>
+          </column>            
+          <column name="name" type="${enum.caption.type}">
+              <constraints nullable="false"/>
+          </column>
+          <column name="qualified_name" type="${enum.caption.type}">
+              <constraints unique="true" nullable="false"/>
+          </column>
+      </createTable>
+
+      <createTable tableName="activity_type">
+          <column name="activity_type_id" type="${enum.primaryKey.type}">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="parent_id" type="${enum.primaryKey.type}">
+              <constraints references="activity_type.activity_type_id" foreignKeyName="FK_activity_type_activity_type_id"/>
+          </column>            
+          <column name="name" type="${enum.caption.type}">
+              <constraints nullable="false"/>
+          </column>
+          <column name="qualified_name" type="${enum.caption.type}">
+              <constraints unique="true" nullable="false"/>
+          </column>
+      </createTable>
+
+      <createTable tableName="entity">
+          <column name="entity_id" type="${system.primaryKey.type}" autoIncrement="true">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="entity_type_id" type="${enum.primaryKey.type}">
+              <constraints references="entity_type.entity_type_id" foreignKeyName="FK_entity_type_id" nullable="false"/>
+          </column>
+          <column name="directory_id" type="${enum.primaryKey.type}">
+              <constraints references="directory.directory_id" foreignKeyName="FK_entity_directory_id" nullable="false"/>
+          </column>
+          <column name="identity" type="varchar(255)">
+              <constraints nullable="false"/>
+          </column>
+      </createTable>
+
+      <createTable tableName="entity_relationship">
+          <column name="entity_relationship_id" type="${system.primaryKey.type}" autoIncrement="true">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="relationship_type_id" type="${enum.primaryKey.type}">
+              <constraints references="relationship.relationship_type_id" foreignKeyName="FK_entity_relationship_id" nullable="false"/>
+          </column>
+          <column name="entity_id" type="${system.primaryKey.type}">
+              <constraints references="entity.entity_id" foreignKeyName="FK_entity_relationship_entity_id" nullable="false"/>
+          </column>
+          <column name="related_id" type="${system.primaryKey.type}">
+              <constraints references="entity.entity_id" foreignKeyName="FK_entity_relationship_related_id" nullable="false"/>
+          </column>
+          <column name="name" type="varchar(255)" remarks="Used only when the relationship type is 'custom'"/>
+      </createTable>
+
+      <createTable tableName="entity_attr">
+          <column name="entity_attr_id" type="${system.primaryKey.type}" autoIncrement="true">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="entity_attr_type_id" type="${enum.primaryKey.type}">
+              <constraints references="attr_type.attr_type_id" foreignKeyName="FK_entity_attr_type_id" nullable="false"/>
+          </column>
+          <column name="parent_id" type="${system.primaryKey.type}">
+              <constraints references="entity_attr.entity_attr_id" foreignKeyName="FK_entity_attr_parent_id"/>
+          </column>            
+          <column name="entity_id" type="${system.primaryKey.type}">
+              <constraints references="entity.entity_id" foreignKeyName="FK_entity_attr_entity_id" nullable="false"/>
+          </column>
+          <column name="relationship_id" type="${system.primaryKey.type}" remarks="Usually the attribute applies to an entity but sometimes it applies to a relationship">
+              <constraints references="entity_relationship.entity_relationship_id" foreignKeyName="FK_entity_attr_entity_relationship_id" nullable="false"/>
+          </column>
+          <column name="name" type="varchar(255)" remarks="Used only when the attribute type is 'custom'"/>
+      </createTable>
+
+      <createTable tableName="entity_attr_value">
+          <column name="entity_attr_value_id" type="${system.primaryKey.type}" autoIncrement="true">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="entity_id" type="${system.primaryKey.type}" remarks="Denormalized for easier access without multiple joins">
+              <constraints references="entity.entity_id" foreignKeyName="FK_entity_attr_value_entity_id" nullable="false"/>
+          </column>
+          <column name="entity_attr_id" type="${enum.primaryKey.type}">
+              <constraints references="entity.entity_attr_id" foreignKeyName="FK_entity_attr_value_attr_id" nullable="false"/>
+          </column>
+          <column name="position" type="int" remarks="If this is an array of values, this is the index in the array"/>
+      </createTable>
+
+      <createTable tableName="entity_attr_value_text">
+          <column name="entity_attr_value_text_id" type="${system.primaryKey.type}" autoIncrement="true">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="entity_id" type="${system.primaryKey.type}" remarks="Denormalized for easier access without multiple joins">
+              <constraints references="entity.entity_id" foreignKeyName="FK_entity_attr_value_entity_id" nullable="false"/>
+          </column>
+          <column name="entity_attr_id" type="${system.primaryKey.type}" remarks="Denormalized for easier access without multiple joins">
+              <constraints references="entity.entity_attr_id" foreignKeyName="FK_entity_attr_value_attr_id" nullable="false"/>
+          </column>
+          <column name="entity_attr_value_id" type="${system.primaryKey.type}">
+              <constraints references="entity_attr_value.entity_attr_value_id" foreignKeyName="FK_entity_attr_value_entity_attr_value_id" nullable="false"/>
+          </column>
+          <column name="value_type_domain_item_id" type="${enum.primaryKey.type}">
+              <constraints references="value_type_domain_item.value_type_domain_item_id" foreignKeyName="FK_value_type_domain_item.value_type_domain_item_id"/>
+          </column>            
+          <column name="value" type="varchar(4096)">
+              <constraints nullable="false"/>
+          </column>
+      </createTable>
+
+      <createTable tableName="entity_attr_value_date">
+          <column name="entity_attr_value_text_id" type="${system.primaryKey.type}" autoIncrement="true">
+              <constraints primaryKey="true" nullable="false"/>
+          </column>
+          <column name="entity_id" type="${system.primaryKey.type}" remarks="Denormalized for easier access without multiple joins">
+              <constraints references="entity.entity_id" foreignKeyName="FK_entity_attr_value_entity_id" nullable="false"/>
+          </column>
+          <column name="entity_attr_id" type="${system.primaryKey.type}" remarks="Denormalized for easier access without multiple joins">
+              <constraints references="entity.entity_attr_id" foreignKeyName="FK_entity_attr_value_attr_id" nullable="false"/>
+          </column>
+          <column name="entity_attr_value_id" type="${system.primaryKey.type}">
+              <constraints references="entity_attr_value.entity_attr_value_id" foreignKeyName="FK_entity_attr_value_entity_attr_value_id" nullable="false"/>
+          </column>
+          <column name="value" type="date">
+              <constraints nullable="false"/>
+          </column>
+      </createTable>
+    </changeSet>
+ 
+</databaseChangeLog>
