@@ -12,25 +12,7 @@
     <changeSet id="001-OGE-admin-utility" author="Shahid N. Shah">
       <sql>
           insert into directory (directory_id, qualified_name, name) values (0, 'Prime', 'Prime');
-      </sql>
 
-      <ext:createOpenSchemaEntity id="0" name="Any" directory="${directory.prime}"/>
-
-      <ext:createOpenSchemaEntity id="1000" name="Party" directory="${directory.prime}"/>
-      <ext:createOpenSchemaEntity id="1001" name="Person" parent="Party"/>
-      <ext:createOpenSchemaEntity id="1010" name="Filer" parent="Party.Person"/>
-      <ext:createOpenSchemaEntity id="1020" name="User" parent="Party.Person"/>
-
-      <ext:createOpenSchemaEntity id="2000" parent="Party" name="Organization"/>
-      <ext:createOpenSchemaEntity id="2010" parent="Party.Organization" name="Agency/Department"/>
-      <ext:createOpenSchemaEntity id="2020" parent="Party.Organization.Agency/Department" name="Component"/>
-      
-      <ext:createOpenSchemaEntity id="3000" name="Activity" parent="Party"/>
-
-      <ext:createOpenSchemaEntity id="5000" name="Document" directory="${directory.prime}"/>
-
-
-<!--       <sql>
           insert into relationship_type (relationship_type_id, direction) values (0, 'NULL');
           insert into relationship_type (relationship_type_id, direction) values (100, 'Party.Person -> Party.Organization');
           insert into relationship_type (relationship_type_id, direction) values (200, 'Party.Person.Filer -> Document : owns');
@@ -38,6 +20,52 @@
 
           insert into value_type (value_type_id, qualified_name, name, table_name) values (0, 'Text', 'Text', 'entity_attr_value_text');
           insert into value_type (value_type_id, qualified_name, name, table_name) values (1, 'Date', 'Date', 'entity_attr_value_date');
+          insert into value_type (value_type_id, qualified_name, name, table_name) values (100, 'File System Reference', 'File System Reference', 'entity_attr_value_text');
+
+          insert into value_type (value_type_id, qualified_name, name, is_domain_constrained, table_name) values (110, 'Form Type', 'Form Type', true, 'entity_attr_value_text');
+          insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11000, 110, 0, '278NEW', '278NEW');
+          insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11001, 110, 1, '278TERM', '278TERM');
+          insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11002, 110, 2, '278ANN', '278ANN');
+          insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11003, 110, 3, '278TRnn', '278TRnn');
+      </sql>
+
+      <ext:createOpenSchemaEntity id="0" name="Any" directory="${directory.prime}"/>
+
+      <ext:createOpenSchemaEntity id="1000" name="Party" directory="${directory.prime}"/>
+      <ext:createOpenSchemaEntity id="1001" name="Person" parent="Party">
+          <ext:attribute name="Last Name" type="Text"/>
+          <ext:attribute name="First Name" type="Text"/>
+          <ext:attribute name="Middle Name" type="Text"/>
+      </ext:createOpenSchemaEntity>
+
+      <ext:createOpenSchemaEntity id="1010" name="Filer" parent="Party.Person">
+          <ext:attribute name="Position Title" type="Text"/>        
+      </ext:createOpenSchemaEntity>
+
+      <ext:createOpenSchemaEntity id="1020" name="User" parent="Party.Person"/>
+
+      <ext:createOpenSchemaEntity id="2000" parent="Party" name="Organization">
+          <ext:attribute name="Name" type="Text"/>
+      </ext:createOpenSchemaEntity>
+
+      <ext:createOpenSchemaEntity id="2010" parent="Party.Organization" name="Agency/Department"/>
+      <ext:createOpenSchemaEntity id="2020" parent="Party.Organization.Agency/Department" name="Component">
+          <ext:attribute name="MAX Community Group" type="Text"/>
+      </ext:createOpenSchemaEntity>
+      
+      <ext:createOpenSchemaEntity id="3000" name="Activity" parent="Party"/>
+
+      <ext:createOpenSchemaEntity id="5000" name="Document" directory="${directory.prime}">
+          <ext:attribute name="Name" type="Text"/>
+          <ext:attribute name="File System Path" type="File System Reference"/>
+      </ext:createOpenSchemaEntity>
+
+
+<!--       <sql>
+          insert into relationship_type (relationship_type_id, direction) values (0, 'NULL');
+          insert into relationship_type (relationship_type_id, direction) values (100, 'Party.Person -> Party.Organization');
+          insert into relationship_type (relationship_type_id, direction) values (200, 'Party.Person.Filer -> Document : owns');
+          insert into relationship_type (relationship_type_id, direction) values (210, 'Party.Person.User -> Document : uploaded');
 
           insert into entity_type (directory_id, entity_type_id, qualified_name, name) values (0, 0, 'Any', 'Any');
 
@@ -62,14 +90,7 @@
           insert into entity_type (directory_id, entity_type_id, qualified_name, name) values (0, 2000, 'Document', 'Document');
           insert into attr_type (attr_type_id, entity_type_id, value_type_id, qualified_name, name) values (2000, 2000, 0, 'Document', 'Name');
 
-          insert into value_type (value_type_id, qualified_name, name, table_name) values (100, 'File System Reference', 'File System Reference', 'entity_attr_value_text');
           insert into attr_type (attr_type_id, entity_type_id, value_type_id, qualified_name, name) values (2001, 2000, 100, 'Document.File System Path', 'File System Path');
-
-          insert into value_type (value_type_id, qualified_name, name, is_domain_constrained, table_name) values (110, 'Form Type', 'Form Type', true, 'entity_attr_value_text');
-          insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11000, 110, 0, '278NEW', '278NEW');
-          insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11001, 110, 1, '278TERM', '278TERM');
-          insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11002, 110, 2, '278ANN', '278ANN');
-          insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11003, 110, 3, '278TRnn', '278TRnn');
       </sql>
  -->
     </changeSet>

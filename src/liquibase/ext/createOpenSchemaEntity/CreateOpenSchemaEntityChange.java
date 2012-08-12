@@ -7,21 +7,78 @@ import liquibase.database.Database;
 import liquibase.statement.core.InsertStatement;
 import liquibase.change.ChangeMetaData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CreateOpenSchemaEntityChange extends AbstractChange {
     private Integer id;
     private String directory;
     private String parent;
     private String qualifiedName;
     private String name;
-/*    private SampleChild child;
-    private SampleChild child2;
-*/
+    private List<Attribute> attributes;
+
+    protected class Attribute
+    {
+        private int position;
+        private Integer id;
+        private String name;
+        private String qualifiedName;
+        private String type;
+
+        public Attribute(int position) {
+            this.position = position;
+        }
+
+        public Integer getId() {
+            return id == null ? CreateOpenSchemaEntityChange.this.getId() + position : id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public Object getTypeValue() {
+            return new DatabaseFunction(String.format("(select value_type_id from value_type where qualified_name = '%s')", getType()));
+        }
+
+        public String getQualifiedName() {
+            return qualifiedName == null ? (CreateOpenSchemaEntityChange.this.getQualifiedName() + ".") + name : qualifiedName;
+        }
+
+        public void setQualifiedName(String qualifiedName) {
+            this.qualifiedName = qualifiedName;
+        }
+
+        public SqlStatement getSqlStatement() {
+            return new InsertStatement(null, "attr_type")
+                    .addColumnValue("attr_type_id", getId())
+                    .addColumnValue("entity_type_id", CreateOpenSchemaEntityChange.this.getId())
+                    .addColumnValue("value_type_id", getTypeValue())
+                    .addColumnValue("qualified_name", getQualifiedName())
+                    .addColumnValue("name", getName());
+        }
+    }
+
     public CreateOpenSchemaEntityChange() {
         super("createOpenSchemaEntity", "Create a new open-schema entity", ChangeMetaData.PRIORITY_DEFAULT);
-/*
-        setDirectory("Prime");
-        setParent("Any");
-*/
+        attributes = new ArrayList<Attribute>();
     }
 
     public String getConfirmationMessage() {
@@ -29,14 +86,19 @@ public class CreateOpenSchemaEntityChange extends AbstractChange {
     }
 
     public SqlStatement[] generateStatements(Database database) {
-        return new SqlStatement[]{
-            new InsertStatement(null, "entity_type")
+        final List<SqlStatement> result = new ArrayList<SqlStatement>();
+        result.add(new InsertStatement(null, "entity_type")
                 .addColumnValue("directory_id", getDirectoryValue())
                 .addColumnValue("parent_id", getParentValue())
                 .addColumnValue("entity_type_id", getId())
                 .addColumnValue("qualified_name", getQualifiedName())
                 .addColumnValue("name", getName())
-        };
+        );
+        for(final Attribute a : attributes)
+        {
+            result.add(a.getSqlStatement());
+        }
+        return result.toArray(new SqlStatement[result.size()]);
     }
 
     public Integer getId() {
@@ -95,6 +157,12 @@ public class CreateOpenSchemaEntityChange extends AbstractChange {
 
     public void setQualifiedName(String qualifiedName) {
         this.qualifiedName = qualifiedName;
+    }
+
+    public Attribute createAttribute() {
+        Attribute attr = new Attribute(attributes.size());
+        attributes.add(attr);
+        return attr;
     }
 
 /*    public SampleChild getChild() {
