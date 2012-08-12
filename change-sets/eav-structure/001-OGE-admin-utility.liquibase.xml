@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
  
 <databaseChangeLog
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
  
+    <property name="directory.prime" value="Prime"/>
+
     <changeSet id="001-OGE-admin-utility" author="Shahid N. Shah">
       <sql>
           insert into directory (directory_id, qualified_name, name) values (0, 'Prime', 'Prime');
+      </sql>
 
+      <ext:createOpenSchemaEntity id="0" name="Any" directory="${directory.prime}"/>
+
+      <ext:createOpenSchemaEntity id="1000" name="Party" directory="${directory.prime}"/>
+      <ext:createOpenSchemaEntity id="1001" name="Person" parent="Party"/>
+      <ext:createOpenSchemaEntity id="1010" name="Filer" parent="Party.Person"/>
+      <ext:createOpenSchemaEntity id="1020" name="User" parent="Party.Person"/>
+
+      <ext:createOpenSchemaEntity id="2000" parent="Party" name="Organization"/>
+      <ext:createOpenSchemaEntity id="2010" parent="Party.Organization" name="Agency/Department"/>
+      <ext:createOpenSchemaEntity id="2020" parent="Party.Organization.Agency/Department" name="Component"/>
+      
+      <ext:createOpenSchemaEntity id="3000" name="Activity" parent="Party"/>
+
+      <ext:createOpenSchemaEntity id="5000" name="Document" directory="${directory.prime}"/>
+
+
+<!--       <sql>
           insert into relationship_type (relationship_type_id, direction) values (0, 'NULL');
           insert into relationship_type (relationship_type_id, direction) values (100, 'Party.Person -> Party.Organization');
           insert into relationship_type (relationship_type_id, direction) values (200, 'Party.Person.Filer -> Document : owns');
@@ -50,6 +71,7 @@
           insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11002, 110, 2, '278ANN', '278ANN');
           insert into value_type_domain_item (value_type_domain_item_id, value_type_id, position, name, abbrev) values (11003, 110, 3, '278TRnn', '278TRnn');
       </sql>
+ -->
     </changeSet>
  
 </databaseChangeLog>

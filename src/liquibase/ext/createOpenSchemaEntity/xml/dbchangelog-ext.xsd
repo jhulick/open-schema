@@ -1,0 +1,18 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  elementFormDefault="qualified">
+ 
+  <xsd:element name="createOpenSchemaEntity">
+    <xsd:complexType>
+      <xsd:attribute name="id" type="xsd:integer" use="required" />
+      <xsd:attribute name="directory" type="xsd:string" />
+      <xsd:attribute name="parent" type="xsd:string"/>
+      <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+ 
+</xsd:schema>

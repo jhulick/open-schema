@@ -6,9 +6,6 @@
 
     <target name="prepare">
         <path id="classpath">
-            <fileset dir="bin">
-                <include name="**/*.jar"/>
-            </fileset>
             <fileset dir="lib">
                 <include name="**/*.jar"/>
             </fileset>
@@ -22,9 +19,15 @@
         <property name="database.host" value="box666.bluehost.com"/>
         <property name="database.name" value="blueserf_devl_bfelob_oge_admin"/>
         <property name="database.url" value="jdbc:mysql://${database.host}/${database.name}"/>
+        <property name="database.username" value="blueserf_snshah"/>
+        <property name="database.password" value="Ftv332ezff7"/>
         <property name="database.driver" value="com.mysql.jdbc.Driver"/>
 
         <property name="generated.documentation.path" value="docs/generated"/>
+
+        <property name="liquibase.ext.src.path" value="src"/>
+        <property name="liquibase.ext.build.path" value="WORK"/>
+        <property name="liquibase.ext.jar" value="lib/liquibase-open-schema-extensions.jar"/>
 
         <taskdef resource="liquibasetasks.properties">
             <classpath refid="classpath"/>
@@ -37,7 +40,25 @@
 
     <target name="clean" depends="prepare">
         <delete dir="${generated.documentation.path}"/>
+        <delete dir="${liquibase.ext.compile.path}"/>
+        <delete file="${liquibase.ext.jar}"/>
         <delete file="${liquibase.generate.SQL.file}"/>
+        <delete dir="${liquibase.ext.build.path}"/>
+    </target>
+
+    <target name="build-extn-jar" depends="prepare" description="Compile Java sources and copy to WORK directory">
+        <delete dir="${liquibase.ext.build.path}"/>
+        <mkdir dir="${liquibase.ext.build.path}"/>
+        <javac srcdir="${liquibase.ext.src.path}" destdir="${liquibase.ext.build.path}" includeantruntime="false">
+            <classpath>
+                <pathelement path="lib/liquibase-2.0.5.jar"/>
+            </classpath>
+        </javac>
+        <copy  todir="${liquibase.ext.build.path}">
+          <fileset dir="${liquibase.ext.src.path}" excludes="**/*.java"/>
+        </copy>
+        <delete file="${liquibase.ext.jar}"/>
+        <jar jarfile="${liquibase.ext.jar}" basedir="${liquibase.ext.build.path}"/>
     </target>
 
     <target name="dropAll" depends="prepare">
